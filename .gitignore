@@ -1,0 +1,5 @@
+.env
+.pyodk_conf.toml
+credentials.json
+.DS_Store
+settings.json
