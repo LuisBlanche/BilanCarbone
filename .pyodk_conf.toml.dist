@@ -1,0 +1,5 @@
+[central]
+base_url = "https://freinmoteur.soon.it"
+username = "***"
+password = "***"
+default_project_id = 1
