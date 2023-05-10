@@ -88,9 +88,10 @@ def get_data_from_central(last_date):
 
 def get_distance(row):
     sleep(1)
-    log.debug(f"{row['origin_adress']} {row['dest_adress']} ")
+    log.info(f"{row['origin_adress']} {row['dest_adress']} ")
     geolocator = Nominatim(user_agent="bilancarbonevoyage")
     try:
+
         orig = geolocator.geocode(row["orig"], timeout=1000)
         dest = geolocator.geocode(row["dest"], timeout=1000)
         if orig and dest:
@@ -103,14 +104,16 @@ def get_distance(row):
                     "Minibus": "driving-car",
                     "SpeedBoat": "foot-walking",
                 }
-
-                d = (
-                    ors.directions(
-                        locations=coords,
-                        profile=profiles.get(row["mode"], "driving-car"),
-                    ).distance
-                    / 1000
-                )
+                try:
+                    d = (
+                        ors.directions(
+                            locations=coords,
+                            profile=profiles.get(row["mode"], "driving-car"),
+                        ).distance
+                        / 1000
+                    )
+                except RouterApiError:
+                    d = 0
             else:
                 d = (
                     distance.distance(
@@ -151,7 +154,8 @@ def main():
             ]
         ].values.tolist()
         append_values(SPREADSHEET_ID, "C:I", "USER_ENTERED", to_append)
-    else: 
+        log.info(f'Appended {len(df)} rows')
+    else:
         log.info('Not new data ')
         
 
