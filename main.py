@@ -132,7 +132,7 @@ def main():
     load_dotenv()
     SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID")
     dates = get_values(SPREADSHEET_ID, "I:I")
-    LAST_DATE = str(max([pd.to_datetime(d[0], format='%d/%m/%Y') for d in dates['values'] if d[0] != "Date"]).date())
+    LAST_DATE = str(max([pd.to_datetime(d[0], format='%Y-%m-%d') for d in dates['values'] if d[0] != "Date"]).date())
 
     df = get_data_from_central(LAST_DATE) 
     df = df[pd.to_datetime(df['date']) > LAST_DATE] # need this because data from central is filtered on submission date not trip date
